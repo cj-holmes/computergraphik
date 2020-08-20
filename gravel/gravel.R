@@ -27,8 +27,8 @@ fun <- function(k, l){
 }
 
 # Help to visualise the function with different values of k and l
-plot(t, fun(k=1, l=1)(t))
-lines(t, fun(k=2, l=1)(t), col=2)
+# plot(t, fun(k=1, l=1)(t))
+# lines(t, fun(k=2, l=1)(t), col=2)
 
 
 # Define a function that will map of over all xy coordinate pairs in turn
@@ -51,12 +51,17 @@ set.seed(1)
 d %>% 
   mutate(map2_df(x, y, f)) %>%
   ggplot()+
-  geom_lc(aes(x=xn, y=-yn, length=u, width=u, angle=angle), fill=NA)+
+  geom_lc(aes(x=xn, y=-yn, length=u, width=u, angle=angle), fill=NA, size=0.65)+
   # geom_lc(aes(x=xn, y=-yn, length=u, width=u, angle=angle), fill=NA, lc_shape = "ellipse")+
   # geom_text(aes(xn, -yn, label=rn, angle=angle), col="grey")+
   coord_equal()+
-  theme_void()+
-  theme(legend.position = "")
+  theme_minimal()+
+  theme(legend.position = "",
+        panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank())+
+  annotate(geom="text", x=(nx*u)-(0.5*u), y=-(ny+1.5)*u, hjust=1, vjust=1, 
+           label="Homage to Georg Nees [Schotter]\ngithub.com/cj-holmes", col="grey70")
   # scale_fill_gradient(low = "grey50", high="white")+
 
 # Save 
