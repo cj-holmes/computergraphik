@@ -51,7 +51,7 @@ set.seed(1)
 d %>% 
   mutate(map2_df(x, y, f)) %>%
   ggplot()+
-  geom_lc(aes(x=xn, y=-yn, length=u, width=u, angle=angle), fill=NA, size=0.65)+
+  geom_lc(aes(x=xn, y=-yn, length=u, width=u, angle=angle), fill=NA, size=0.55)+
   # geom_lc(aes(x=xn, y=-yn, length=u, width=u, angle=angle), fill=NA, lc_shape = "ellipse")+
   # geom_text(aes(xn, -yn, label=rn, angle=angle), col="grey")+
   coord_equal()+
@@ -61,12 +61,17 @@ d %>%
         axis.text = element_blank(),
         axis.title = element_blank())+
   annotate(geom="text", x=(nx*u)-(0.5*u), y=-(ny+1.5)*u, hjust=1, vjust=1, 
-           label="Homage to Georg Nees [Schotter]\ngithub.com/cj-holmes", col="grey70")
+           label="Homage to Georg Nees [Schotter]\ngithub.com/cj-holmes/generative-art", 
+           col="grey70", size=2.5)
   # scale_fill_gradient(low = "grey50", high="white")+
 
 # Save 
-# A3 pdf
+# A3
 ggsave("gravel/gravel-a3.pdf", device="pdf", width=11.69, height=16.53, units="in")
 
-# A4 pdf
+# A4
 ggsave("gravel/gravel-a4.pdf", device="pdf", width=8.27, height=11.69, units="in")
+ggsave("gravel/gravel-a4.png", device="png", width=8.27, height=11.69, units="in", dpi=300)
+
+
+
