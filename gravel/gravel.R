@@ -62,7 +62,8 @@ d %>%
   theme(legend.position = "",
         panel.grid = element_blank(),
         axis.text = element_blank(),
-        axis.title = element_blank())+
+        axis.title = element_blank(),
+        axis.ticks = element_blank())+
   annotate(geom="text", x=(nx*u)-(0.5*u), y=-(ny+1.5)*u, hjust=1, vjust=1, 
            label="Homage to Georg Nees [Schotter]\ngithub.com/cj-holmes/computergraphik", 
            col="grey70", size=2.5)
