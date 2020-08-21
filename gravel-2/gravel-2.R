@@ -63,9 +63,10 @@ d %>%
         axis.text = element_blank(),
         axis.title = element_blank(),
         axis.ticks = element_blank(),
-        panel.background = element_rect(fill="white", colour=NA))+
+        panel.background = element_rect(fill="white", colour=NA),
+        plot.background = element_rect(fill="white", colour = NA))+
   annotate(geom="text", x=min(d$xn), y=min(-d$yn), hjust=0, vjust=0.5, 
            label="Homage to Georg Nees [Schotter]\ngithub.com/cj-holmes/computergraphik", 
            col="grey70", size=2.5)
 
-ggsave("gravel-2/gravel-2.pdf", device="pdf", width=21.8, height=28, units="cm")
+ggsave("gravel-2/out/gravel-2.pdf", device="pdf", width=21.8, height=28, units="cm", bg="white")

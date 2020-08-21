@@ -63,15 +63,17 @@ d %>%
         panel.grid = element_blank(),
         axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())+
+        axis.ticks = element_blank(),
+        panel.background = element_rect(fill="white", colour = NA),
+        plot.background = element_rect(fill="white", colour = NA))+
   annotate(geom="text", x=(nx*u)-(0.5*u), y=-(ny+1.5)*u, hjust=1, vjust=1, 
            label="Homage to Georg Nees [Schotter]\ngithub.com/cj-holmes/computergraphik", 
            col="grey70", size=2.5)
   # scale_fill_gradient(low = "grey50", high="white")+
 
 # Save 
-ggsave("gravel/gravel.pdf", device="pdf", width=21.8, height=28, units="cm")
-ggsave("gravel/gravel.png", device="png", width=21.8, height=28, units="cm")
+ggsave("gravel/out/gravel.pdf", device="pdf", width=21.8, height=28, units="cm", bg="white")
+ggsave("gravel/out/gravel.png", device="png", width=21.8, height=28, units="cm", bg="white")
 
 
 # Variation A (black baground and cividis colour) -------------------------
@@ -97,5 +99,5 @@ d %>%
   scale_colour_viridis_c(option="cividis", begin=0.3)
 
 # Save
-ggsave("gravel/gravel-a.pdf", device="pdf", width=21.8, height=28, units="cm", bg="grey10")
-ggsave("gravel/gravel-a.png", device="png", width=21.8, height=28, units="cm", bg="grey10")
+ggsave("gravel/out/gravel-a.pdf", device="pdf", width=21.8, height=28, units="cm", bg="grey10")
+ggsave("gravel/out/gravel-a.png", device="png", width=21.8, height=28, units="cm", bg="grey10")

@@ -11,4 +11,4 @@ My first attempt is at reproducing [Georg Nees 1968-1970
 ***Schotter***](https://collections.vam.ac.uk/item/O221321/schotter-print-nees-georg/)
 (Gravel)
 
-<img src="gravel/gravel.png" height="800"/>
+<img src="gravel/out/gravel.png" height="600"/>
