@@ -43,6 +43,9 @@ f <- function(x, y){
   tibble(xn=xn, yn=yn, angle=angle)
 }
 
+
+# Generate image ----------------------------------------------------------
+
 # Set seed for reproducability
 set.seed(1)
 
@@ -70,3 +73,26 @@ ggsave("gravel/gravel.pdf", device="pdf", width=21.8, height=28, units="cm")
 ggsave("gravel/gravel.png", device="png", width=21.8, height=28, units="cm")
 
 
+# Variation A (black baground and cividis colour) -------------------------
+
+d %>% 
+  mutate(map2_df(x, y, f)) %>%
+  ggplot()+
+  geom_lc(aes(x=xn, y=-yn, length=u, width=u, angle=angle, col=yn), fill=NA, size=0.5)+
+  coord_equal()+
+  theme_minimal()+
+  theme(legend.position = "",
+        panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        panel.background = element_rect(fill="grey10", colour = NA),
+        plot.background = element_rect(fill="grey10", colour = NA))+
+  annotate(geom="text", x=(nx*u)-(0.5*u), y=-(ny+1.5)*u, hjust=1, vjust=1, 
+           label="Homage to Georg Nees [Schotter]\ngithub.com/cj-holmes/computergraphik", 
+           col="grey70", size=2.5)+
+  scale_colour_viridis_c(option="cividis", begin=0.3)
+
+# Save
+ggsave("gravel/gravel-a.pdf", device="pdf", width=21.8, height=28, units="cm", 
+       bg="grey10")
