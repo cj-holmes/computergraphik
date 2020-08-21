@@ -75,6 +75,8 @@ ggsave("gravel/gravel.png", device="png", width=21.8, height=28, units="cm")
 
 # Variation A (black baground and cividis colour) -------------------------
 
+set.seed(1)
+
 d %>% 
   mutate(map2_df(x, y, f)) %>%
   ggplot()+
@@ -94,5 +96,5 @@ d %>%
   scale_colour_viridis_c(option="cividis", begin=0.3)
 
 # Save
-ggsave("gravel/gravel-a.pdf", device="pdf", width=21.8, height=28, units="cm", 
-       bg="grey10")
+ggsave("gravel/gravel-a.pdf", device="pdf", width=21.8, height=28, units="cm", bg="grey10")
+ggsave("gravel/gravel-a.png", device="png", width=21.8, height=28, units="cm", bg="grey10")
