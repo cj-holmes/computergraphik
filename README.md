@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# generative-art
+# computergraphik
 
 A repository to document and share my attempts at generative art in R.
 
