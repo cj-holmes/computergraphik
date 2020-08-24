@@ -9,6 +9,11 @@ A repository to document and share my attempts at generative art in R.
 
 My first attempt is at reproducing [Georg Nees 1968-1970
 ***Schotter***](https://collections.vam.ac.uk/item/O221321/schotter-print-nees-georg/)
-(Gravel)
+(Gravel).
 
-<img src="gravel/out/gravel.png" height="600"/>
+<img src="gravel/original/out/gravel.png" height="500"/>
+
+Along with some variations on the same theme…
+
+<img src="gravel/variations/out/gravel-a.png" height="500"/>
+<img src="gravel/variations/out/gravel-b.png" height="500"/>
