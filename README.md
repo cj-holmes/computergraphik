@@ -15,5 +15,4 @@ My first attempt is at reproducing [Georg Nees 1968-1970
 
 Along with some variations on the same theme…
 
-<img src="gravel/variations/out/gravel-a.png" width="300"/>
-<img src="gravel/variations/out/gravel-b.png" width="300"/>
+<img src="gravel/variations/out/gravel-a.png" width="300"/><img src="gravel/variations/out/gravel-b.png" width="300"/>
