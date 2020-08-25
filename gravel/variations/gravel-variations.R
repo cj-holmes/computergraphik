@@ -5,6 +5,28 @@
 library(tidyverse) # For wrangling
 library(gglcd) # For geom_lc()
 
+# Define a function for how values will change (x, y, angle)
+# The function returned will work when x is varied between 0 and 1
+fun <- function(k, l, t=seq(0, 1, l=100)){
+  
+  # y vary exponentially
+  y <- exp(k*(t))
+  
+  # Normalise y to vary between 0 and and l
+  approxfun(x = t,
+            y = ((y-min(y))/(max(y) - min(y))) * l, 
+            rule = 2)
+}
+
+# Help to visualise the function with different values of k and l
+t <- seq(0, 1, l=100)
+plot(t, fun(k=3, l=1)(t), xlim=c(0, 1.5), col="black")
+points(t, fun(k=2, l=0.5)(t), col="red")
+points(seq(0, 1.5, l=100), fun(k=5, l=0.75)(seq(0,1.5, l=100)), col="blue")
+
+
+
+# Version A ---------------------------------------------------------------
 # Define number of boxes in x and y
 nx <- 21
 ny <- 12
@@ -19,38 +41,38 @@ d <-
            x = seq(0, 1, by = u)) %>% 
   mutate(rn = row_number())
 
-# Define a function for how values change in y 
-t <- seq(0, 1, l=100)
-fun <- function(k, l){
-  y <- exp(k*(t))
-  approxfun(t, ((y-min(y))/(max(y) - min(y))) * l)
-}
-
-# Help to visualise the function with different values of k and l
-plot(t, fun(k=3, l=1)(t))
-lines(t, fun(k=10, l=1)(t), col=2)
-
 
 # Define a function that will map of over all xy coordinate pairs in turn
 # Give it x and y and it will return the new values of x and y and angle
 f <- function(x, y){
   
-  xn <- x + runif(1, min = -fun(k=1, l=0.4*u)(x), max = fun(k=1, l=0.4*u)(x))
-  yn <- y + fun(k=7, l=10*u)(x) + runif(1, min=0, max=fun(k=7, l=1*u)(x))
-    
-  # yn <- y + fun(k=2, l=1*u)(y) + runif(1, min = -fun(4, 0.8*u)(y), max = fun(4, 0.8*u)(y))
-  angle <- 0 + runif(1, min = fun(k=2, l=-30)(x), max = fun(k=2, l=30)(x))
+  # Vary x position as a function of x
+  xn <- 
+    x + 
+    runif(1,
+          min = -fun(k=1, l=0.4*u)(x), 
+          max = fun(k=1, l=0.4*u)(x))
   
+  # Vary y position as a function of x  
+  # Add exponential y position and then add noise
+  yn <- 
+    y + 
+    fun(k=7, l=10*u)(x) + 
+    runif(1, min=0, max=fun(k=7, l=1*u)(x))
+    
+  # Vary angle as a functio of x
+  angle <- 0 + runif(1, 
+                     min = fun(k=2, l=-30)(x), 
+                     max = fun(k=2, l=30)(x))
+  
+  # Return a tibble of the new x, y and angle
   tibble(xn=xn, yn=yn, angle=angle)
 }
 
 
 # Generate image ----------------------------------------------------------
 
-# Map the function across all x-y pairs and plot the image using ggplot and
-# my geom_lc() function
-
-colours <- viridis::cividis(2, alpha=1/2)
+# Map the function across all x-y pairs and plot
 set.seed(1)
 d <- d %>% mutate(map2_df(x, y, f))
 
@@ -72,7 +94,6 @@ d %>%
   annotate(geom="text", x=min(d$xn), y=min(-d$yn), hjust=0, vjust=0.5, 
            label="Homage to Georg Nees [Schotter]\ngithub.com/cj-holmes/computergraphik", 
            col="grey70", size=2.5)
-  # scale_fill_gradient2(low=colours[1], high=colours[2], mid = "white", midpoint = 0)
 
 ggsave("gravel/variations/out/gravel-a.pdf", device="pdf", width=21.8, height=28, units="cm", bg="white")
 ggsave("gravel/variations/out/gravel-a.png", device="png", width=21.8, height=28, units="cm", bg="white")
@@ -80,10 +101,7 @@ ggsave("gravel/variations/out/gravel-a.png", device="png", width=21.8, height=28
 
 
 
-
-
-
-# Square ------------------------------------------------------------------
+# Version B ---------------------------------------------------------------
 
 # Define number of boxes in x and y
 nx <- 21
@@ -99,13 +117,13 @@ d <-
            x = seq(0, 1, by = u)) %>% 
   mutate(rn = row_number())
 
-
 # Grid origin
 ox <- (max(d$x)/2)+u/2
 oy <- (max(d$y)/2)+u/2
 
 f <- function(x, y){
   
+  # Compute distance from origin for the x and y coordinates
   distance <- ((x - ox)^2 + (y - oy)^2)^0.5
   
   xn <- x + runif(1, 
@@ -128,7 +146,7 @@ d <- d %>% mutate(map2_df(x, y, f))
   
 d %>% 
   ggplot()+
-  geom_lc(aes(x=xn, y=yn, length=u, width=u, angle=angle), fill=NA, col="grey10", size=0.3)+
+  geom_lc(aes(x=xn, y=yn, length=u, width=u, angle=angle), fill=NA, col="grey10", size=0.4)+
   expand_limits(y=-0.25)+
   coord_equal()+
   theme_minimal()+
@@ -149,24 +167,9 @@ ggsave("gravel/variations/out/gravel-b.png", device="png", width=21.8, height=28
 
 
 
+# Version C ---------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-# spiral ------------------------------------------------------------------
-
-
-
-library(tidyverse) # For wrangling
-library(gglcd) # For geom_lc()
-
+# Return a datframe of x-y coordinates of a spiral
 spiral <- function(x, y, n, res, a0, a1){
   
   b <- (a1 - a0)/(2*pi*n)
@@ -177,8 +180,8 @@ spiral <- function(x, y, n, res, a0, a1){
 }
 
 # Define number of boxes in x and y
-nx <- 21
-ny <- 21
+nx <- 31
+ny <- 31
 
 # Compute unit size of a box
 u <- 1/nx
@@ -190,11 +193,11 @@ d <-
            x = seq(0, 1, by = u)) %>% 
   mutate(rn = row_number())
 
-
 # Generate spiral coordinates
 ox <- (max(d$x)/2)+u/2
 oy <- (max(d$y)/2)+u/2
 
+# Define spiral coordinates
 spiral_data <-
   spiral(ox, oy, 
          n=5, 
@@ -204,7 +207,30 @@ spiral_data <-
   mutate(spiral_id = row_number()) %>% 
   rename(spiral_x = x, spiral_y=y)
 
-#
+
+f <- function(x, y, on_spiral){
+
+  distance <- ((x - ox)^2 + (y - oy)^2)^0.5
+
+  if(!on_spiral){return(tibble(xn=x, yn=y, angle=0, dist=distance))}
+  
+    
+  xn <- x + runif(1, 
+                  min = -fun(k=1, l=1*u)(distance), 
+                  max = fun(k=1, l=1*u)(distance))
+  
+  yn <- y + runif(1, 
+                  min = -fun(k=1, l=1*u)(distance), 
+                  max = fun(k=1, l=1*u)(distance))
+  
+  angle <- 0 + runif(1, 
+                     min = fun(k=1, l=-45)(distance), 
+                     max = fun(k=1, l=45)(distance))
+  
+  tibble(xn=xn, yn=yn, angle=angle, dist=distance)
+}
+
+# Return which grid boxes the spiral touches
 a <- 
   d %>%
   rename(box_x = x, box_y=y) %>% 
@@ -215,13 +241,27 @@ a <-
   mutate(distance = ((box_x - ox)^2 + (box_y - oy)^2)^0.5)
 
 
+d <- 
+  d %>% 
+  mutate(on_spiral = rn %in% a$rn) %>% 
+  mutate(pmap_df(list(x, y, on_spiral), f))
+
 d %>% 
   ggplot()+
-  geom_lc(aes(x=x, y=y, length=u, width=u, angle=0), col="grey10", fill=NA, size=0.5)+
-  geom_segment(data = spiral_data, aes(spiral_x, spiral_y, 
-                                       xend=lead(spiral_x), yend=lead(spiral_y)),
-               col=2)+
-  geom_point(data = a, aes(x=box_x, y=box_y, col=distance), size=3)+
+  geom_lc(aes(x=xn, 
+              y=yn, 
+              length=u, 
+              width=u, 
+              angle=angle), 
+          col="grey10", 
+          size=0.4,
+          fill = NA)+
+  # geom_segment(data = spiral_data,
+  #              aes(spiral_x,
+  #                  spiral_y,
+  #                  xend=lead(spiral_x),
+  #                  yend=lead(spiral_y)),
+  #                col=2)+
   coord_equal()+
   theme_minimal()+
   theme(legend.position = "",
@@ -230,4 +270,10 @@ d %>%
         axis.title = element_blank(),
         axis.ticks = element_blank(),
         panel.background = element_rect(fill="white", colour=NA),
-        plot.background = element_rect(fill="white", colour = NA))
+        plot.background = element_rect(fill="white", colour = NA))+
+  annotate(geom="text", x=1, y=-0.25, hjust=1, vjust=0.5, 
+           label="Homage to Georg Nees [Schotter]\ngithub.com/cj-holmes/computergraphik", 
+           col="grey70", size=2.5)
+
+ggsave("gravel/variations/out/gravel-c.pdf", device="pdf", width=21.8, height=28, units="cm", bg="white")
+ggsave("gravel/variations/out/gravel-c.png", device="png", width=21.8, height=28, units="cm", bg="white")
